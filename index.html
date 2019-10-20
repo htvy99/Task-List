@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Compiled and minified CSS -->
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    /> -->
+    <!-- <link
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    /> -->
+    <title>Task List</title>
+  </head>
+  <body>
+    <div class="container">
+      <div id="mainCard">
+        <!-- Add Task -->
+        <div class="card addTaskCard">
+          <h2>Add New Task</h2>
+          <form id="taskForm">
+            <input type="text" placeholder="New Task" id="taskInput" />
+            <!-- <input type="submit" class="btn" value="ADD TASK" /> -->
+            <button class="btn">ADD TASK</button>
+          </form>
+        </div>
+        <!-- Task list -->
+        <div class="card List">
+          <h2 class="taskTitle">Tasks List</h2>
+          <input type="text" id="filter" />
+          <ul class="taskList"></ul>
+          <a href="#" class="btn btn-black clearTask">CLEAR TASK</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compiled and minified JavaScript -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> -->
+    <script src="app.js"></script>
+  </body>
+</html>
