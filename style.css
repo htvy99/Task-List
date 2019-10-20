@@ -52,6 +52,12 @@ input:focus {
   font-size: 0.8rem;
 }
 
+.btn:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  color: #fff;
+}
+
 .btn-black {
   background: #333;
 }
