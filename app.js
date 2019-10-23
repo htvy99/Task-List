@@ -1,173 +1,148 @@
-// Define UI variable
-const form = document.querySelector("#taskForm");
-const taskList = document.querySelector(".taskList");
-const clearBtn = document.querySelector(".clearTask");
-// const filter = document.querySelector('#filter');
-const newTask = document.querySelector("#taskInput");
+//Define UI variable
+const ui_form = document.querySelector("#taskForm");
+const ui_inputTask = document.querySelector("#taskInput");
+const ui_submitTask = document.querySelector("#submitTask");
+const ui_taskList = document.querySelector(".taskList");
+const ui_clearBtn = document.querySelector(".clearTask");
 
-// -------------------------------------------------
+// ----------------------------------------------
+// Load event listeners
+// DOM Load event
+document.addEventListener("DOMContentLoaded", getTasks);
+// Add task event
+ui_form.addEventListener("submit", addTask);
+// Remove task
+ui_taskList.addEventListener("click", removeTask);
+// Clear task btn
+ui_clearBtn.addEventListener("click", clearTask);
 
-// Load all event listeners
-loadEventListeners();
-
-function loadEventListeners() {
-  // DOM load event
-  document.addEventListener("DOMContentLoaded", getTask);
-  // Add task event
-  form.addEventListener("submit", addTask);
-  // Remove task event
-  taskList.addEventListener("click", removeTask);
-  // Clear task button
-  clearBtn.addEventListener("click", clearTask);
-  // Filter tasks event
-}
-
-// -------------------------------------------------
-
-// Get tasks from the DOM
-function getTask(e) {
-  // Check local storage & put it to the variable
-  // Initialize the taskList
+// ------------------------------------------------------
+// Show task in the ul whenever the DOM is loaded
+function getTasks() {
   let taskArray;
 
-  // Check if sth is in the LS
-  if (localStorage.getItem("taskList") === null) {
+  // Check if anything is inside the dom
+  if (localStorage.getItem("taskArray") === null) {
     taskArray = [];
   } else {
-    taskArray = JSON.parse(localStorage.getItem("taskList"));
+    taskArray = JSON.parse(localStorage.getItem("taskArray"));
   }
 
-  // Loop throught the tasks that're already there
-  // For each task inside the DOM, we create the task in the html
-  taskArray.forEach(function(task) {
-    // Create li element
+  // For each task in the array, we create taskItem in the html file
+  taskArray.forEach(function(taskItem) {
+    // Create li element & set class name
     const li = document.createElement("li");
     li.className = "taskItem";
     // Create text node & append to the li
-    li.appendChild(document.createTextNode(task));
-    // Create the delete icon
-    const link = document.createElement("a");
-    // Add class
-    link.className = "deleteItem";
-    // Add icon
-    link.innerHTML = '<i class="far fa-times-circle"></i>';
-    // Append the link to the li
-    li.appendChild(link);
+    li.appendChild(document.createTextNode(taskItem));
+    // Create delete icon & add class
+    deleteIcon = document.createElement("i");
+    deleteIcon.id = "deleteItem";
+    deleteIcon.className = "far fa-times-circle";
+    // Append the icon to the li
+    li.appendChild(deleteIcon);
 
-    // Append the li to ul
-    taskList.appendChild(li);
+    // Append the li to the ul
+    ui_taskList.appendChild(li);
   });
 }
 
-// Add tasks function
-function addTask(e) {
-  // make sure there's actually value in the input
-  if (taskInput.value === "") {
+// -------------------------------------------------
+// Add task function
+function addTask() {
+  // Alert if input is empty
+  if (ui_inputTask.value === "") {
     alert("Please add a task");
   }
 
-  // Create li element
+  // Create li element & set class name
   const li = document.createElement("li");
   li.className = "taskItem";
   // Create text node & append to the li
-  li.appendChild(document.createTextNode(taskInput.value));
-  // Create the delete icon
-  const link = document.createElement("a");
-  // Add class
-  link.className = "deleteItem";
-  // Add icon
-  link.innerHTML = '<i class="far fa-times-circle"></i>';
-  // Append the link to the li
-  li.appendChild(link);
+  li.appendChild(document.createTextNode(ui_inputTask.value));
+  // Create delete icon & add class
+  deleteIcon = document.createElement("i");
+  deleteIcon.id = "deleteItem";
+  deleteIcon.className = "far fa-times-circle";
+  // Append the icon to the li
+  li.appendChild(deleteIcon);
 
-  // Append the li to ul
-  taskList.appendChild(li);
+  // Append the li to the ul
+  ui_taskList.appendChild(li);
 
-  // Store in LS
-  storeTaskInLocalStorage(taskInput.value);
+  // Store the new task into local storage
+  storeTaskInLocalStorage(ui_inputTask.value);
+  // localStorage.setItem("taskArray", ui_inputTask.value);
 
-  // clear input
-  taskInput.value = "";
+  // Clear input
+  ui_inputTask.value = "";
 
   // console.log(li);
-
-  e.preventDefault();
+  // e.preventDefault();
 }
 
-// ------------------------------------------------
-
-// Store task
+// ---------------------------------------------------
+// Store task into local storage
 function storeTaskInLocalStorage(newTask) {
-  let taskList;
+  let taskArray;
 
-  // Check if sth is in the LS
-  if (localStorage.getItem("taskList") === null) {
-    taskList = [];
+  // Check if anything is inside the dom
+  if (localStorage.getItem("taskArray") === null) {
+    taskArray = [];
   } else {
-    taskList = JSON.parse(localStorage.getItem("taskList"));
+    taskArray = JSON.parse(localStorage.getItem("taskArray"));
   }
 
-  //put new task to the task list array
-  taskList.push(newTask);
+  // Push new task into the array
+  taskArray.push(newTask);
 
-  // reset the LS w/ the new task list array
-  localStorage.setItem("taskList", JSON.stringify(taskList));
+  // Reset the local storage w/ added value
+  localStorage.setItem("taskArray", JSON.stringify(taskArray));
 }
 
+// --------------------------------------------------------
 // Remove task
 function removeTask(e) {
-  // Target the delete item
-  if (e.target.parentElement.classList.contains("deleteItem")) {
+  // Target at the remove icon
+  if (e.target.id == "deleteItem") {
+    // Confirmation
     if (confirm("Are you sure?")) {
-      e.target.parentElement.parentElement.remove();
+      e.target.parentElement.remove();
 
       // Remove from LS
-      removeTaskFromLocalStorage(e.target.parentElement.parentElement);
+      removeTaskFromLocalStorage(e.target.parentElement);
     }
   }
 }
 
-// ------------------------------------------
-// Remove from LS
-function removeTaskFromLocalStorage(deleteItem) {
-  // Check local storage & put it to the variable
-  // Initialize the taskList
-  let taskArray;
-
-  // Check if sth is in the LS
-  if (localStorage.getItem("taskList") === null) {
+// ---------------------------------------------------------
+// Remove task from local storage
+function removeTaskFromLocalStorage(taskItem) {
+  // Check if anything is inside the dom & put it into array
+  if (localStorage.getItem("taskArray") === null) {
     taskArray = [];
   } else {
-    taskArray = JSON.parse(localStorage.getItem("taskList"));
+    taskArray = JSON.parse(localStorage.getItem("taskArray"));
   }
 
-  //Loop through the array of the LS, if the textContent of the delete item equal to the task in the array, we delete it
+  // Loop through the array & check the text content
   taskArray.forEach(function(task, index) {
-    if (deleteItem.textContent === task) {
+    if (taskItem.textContent == task) {
       taskArray.splice(index, 1);
     }
   });
 
-  // set the local storage again
-  localStorage.setItem("taskList", JSON.stringify(taskArray));
+  // Set the LS again
+  localStorage.setItem("taskArray", JSON.stringify(taskArray));
 }
 
-// ----------------------------------------------
-// Clear task button
-function clearTask(e) {
-  // taskList.innerHTML = "";
-
-  // Faster way
-  while (taskList.firstChild) {
-    taskList.removeChild(taskList.firstChild);
+// ---------------------------------------------------------
+// Clear task
+function clearTask() {
+  while (ui_taskList.firstChild) {
+    ui_taskList.removeChild(ui_taskList.firstChild);
   }
 
-  // Clear task from LS
-  clearTasksFromLocalStorage();
-}
-
-// --------------------------------------------
-// Clear task from LS
-function clearTasksFromLocalStorage() {
+  // Remove task from LS
   localStorage.clear();
 }
